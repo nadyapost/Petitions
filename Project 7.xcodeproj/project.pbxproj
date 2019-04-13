@@ -15,6 +15,7 @@
 		131E9AFE22618F9500127E5C /* Project_7Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 131E9AFD22618F9500127E5C /* Project_7Tests.swift */; };
 		131E9B0922619B4E00127E5C /* Petition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 131E9B0822619B4E00127E5C /* Petition.swift */; };
 		131E9B0B22619B9F00127E5C /* Petitions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 131E9B0A22619B9F00127E5C /* Petitions.swift */; };
+		131E9B0D2261A55100127E5C /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 131E9B0C2261A55100127E5C /* DetailViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +41,7 @@
 		131E9AFF22618F9500127E5C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		131E9B0822619B4E00127E5C /* Petition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Petition.swift; sourceTree = "<group>"; };
 		131E9B0A22619B9F00127E5C /* Petitions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Petitions.swift; sourceTree = "<group>"; };
+		131E9B0C2261A55100127E5C /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,6 +91,7 @@
 				131E9AEF22618F9500127E5C /* Assets.xcassets */,
 				131E9AF122618F9500127E5C /* LaunchScreen.storyboard */,
 				131E9AF422618F9500127E5C /* Info.plist */,
+				131E9B0C2261A55100127E5C /* DetailViewController.swift */,
 			);
 			path = "Project 7";
 			sourceTree = "<group>";
@@ -205,6 +208,7 @@
 			files = (
 				131E9AEB22618F9400127E5C /* ViewController.swift in Sources */,
 				131E9B0B22619B9F00127E5C /* Petitions.swift in Sources */,
+				131E9B0D2261A55100127E5C /* DetailViewController.swift in Sources */,
 				131E9AE922618F9400127E5C /* AppDelegate.swift in Sources */,
 				131E9B0922619B4E00127E5C /* Petition.swift in Sources */,
 			);
