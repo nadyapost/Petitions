@@ -15,8 +15,8 @@ class ViewController: UITableViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     
-    navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Credits", style: .plain, target: self, action: #selector(creditsTapped))
-    navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Filter", style: .plain, target: self, action: #selector(filterTapped))
+    navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Credits", style: .plain, target: self, action: #selector(creditsTapped))
+    navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(filterTapped))
 
     let urlString: String
     
@@ -43,7 +43,6 @@ class ViewController: UITableViewController {
       filteredPetitions = petitions
       tableView.reloadData()
     }
-    
   }
   
   override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -81,7 +80,7 @@ class ViewController: UITableViewController {
     ac.addTextField()
     let searchAction = UIAlertAction(title: "Search", style: .default) { [weak self, weak ac] _ in
       guard let wordToLookFor = ac?.textFields?[0].text else { return }
-      self?.search(wordToLookFor.lowercased())
+      self?.search(wordToLookFor)
     }
     ac.addAction(searchAction)
     present(ac, animated: true)
@@ -91,9 +90,11 @@ class ViewController: UITableViewController {
   func search(_ wordToLookFor: String) {
     if wordToLookFor.count <= 2 {
       filteredPetitions = petitions
+      tableView.reloadData()
       return
     }
     filteredPetitions = []
+    
     for petition in petitions {
       if petition.body.contains(wordToLookFor) {
         filteredPetitions.append(petition)
@@ -102,4 +103,5 @@ class ViewController: UITableViewController {
     tableView.reloadData()
 
     }
+
 }
