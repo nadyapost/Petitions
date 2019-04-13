@@ -85,13 +85,13 @@
 			children = (
 				131E9AE822618F9400127E5C /* AppDelegate.swift */,
 				131E9AEA22618F9400127E5C /* ViewController.swift */,
+				131E9B0C2261A55100127E5C /* DetailViewController.swift */,
 				131E9B0822619B4E00127E5C /* Petition.swift */,
 				131E9B0A22619B9F00127E5C /* Petitions.swift */,
 				131E9AEC22618F9400127E5C /* Main.storyboard */,
 				131E9AEF22618F9500127E5C /* Assets.xcassets */,
 				131E9AF122618F9500127E5C /* LaunchScreen.storyboard */,
 				131E9AF422618F9500127E5C /* Info.plist */,
-				131E9B0C2261A55100127E5C /* DetailViewController.swift */,
 			);
 			path = "Project 7";
 			sourceTree = "<group>";
