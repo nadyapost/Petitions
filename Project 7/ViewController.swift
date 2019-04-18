@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UITableViewController {
+class ViewController: UITableViewController, UITabBarControllerDelegate {
   var petitions = [Petition]()
   var filteredPetitions = [Petition]()
   
@@ -17,32 +17,43 @@ class ViewController: UITableViewController {
     
     navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Credits", style: .plain, target: self, action: #selector(creditsTapped))
     navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(filterTapped))
-
+    performSelector(inBackground: #selector(fetchJSON), with: nil)
+  }
+  
+  @objc func fetchJSON() {
     let urlString: String
     
     if navigationController?.tabBarItem.tag == 0 {
       urlString = "https://api.whitehouse.gov/v1/petitions.json?limit=100"
-      
+      navigationItem.title = "Most recent"
+      navigationController?.navigationBar.prefersLargeTitles = true
     } else {
       urlString = "https://api.whitehouse.gov/v1/petitions.json?signatureCountFloor=10000&limit=100"
-      
+      navigationItem.title = "Top rated"
+      navigationController?.navigationBar.prefersLargeTitles = true
     }
-    if let url = URL(string: urlString) {
-      if let data = try? Data(contentsOf: url) {
-        parse(json: data)
-        return
+   
+      if let url = URL(string: urlString) {
+        if let data = try? Data(contentsOf: url) {
+          parse(json: data)
+          return
+        }
       }
+    performSelector(onMainThread: #selector(showError), with: nil, waitUntilDone: false)
     }
-    showError()
-  }
+  
   func parse(json: Data) {
     let decoder = JSONDecoder()
     
     if let jsonPetitions = try? decoder.decode(Petitions.self, from: json) {
       petitions = jsonPetitions.results
       filteredPetitions = petitions
-      tableView.reloadData()
+      
+      tableView.performSelector(onMainThread: #selector(UITableView.reloadData), with: nil, waitUntilDone: false)
+    } else {
+      performSelector(onMainThread: #selector(showError), with: nil, waitUntilDone: false)
     }
+    
   }
   
   override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -62,10 +73,11 @@ class ViewController: UITableViewController {
     
   }
   
-  func showError() {
-    let ac = UIAlertController(title: "Loading error", message: "There was a problem loading the feed; please check your connection and try again.", preferredStyle: .alert)
-    ac.addAction(UIAlertAction(title: "OK", style: .default))
-    present(ac, animated: true)
+  @objc func showError() {
+      let ac = UIAlertController(title: "Loading error", message: "There was a problem loading the feed; please check your connection and try again.", preferredStyle: .alert)
+      ac.addAction(UIAlertAction(title: "OK", style: .default))
+      present(ac, animated: true)
+ 
   }
   
   @objc func creditsTapped() {
@@ -88,7 +100,7 @@ class ViewController: UITableViewController {
   }
 
   func search(_ wordToLookFor: String) {
-    if wordToLookFor.count <= 2 {
+    if wordToLookFor.count < 2 {
       filteredPetitions = petitions
       tableView.reloadData()
       return
@@ -96,12 +108,22 @@ class ViewController: UITableViewController {
     filteredPetitions = []
     
     for petition in petitions {
-      if petition.body.contains(wordToLookFor) {
+      if petition.body.contains(wordToLookFor) || petition.title.contains(wordToLookFor) {
         filteredPetitions.append(petition)
       }
     }
+
     tableView.reloadData()
+    
 
     }
+  func viewWillAppear(animated: Bool) {
+    super.viewWillAppear(animated)
+    tableView.reloadData()
+  }
+//Want to refresh table view when tab bar item pressed
+//  func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
+//      tableView.reloadData()
+//    }
+  }
 
-}
