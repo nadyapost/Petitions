@@ -17,6 +17,7 @@ class ViewController: UITableViewController, UITabBarControllerDelegate {
     
     navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Credits", style: .plain, target: self, action: #selector(creditsTapped))
     navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(filterTapped))
+    
     performSelector(inBackground: #selector(fetchJSON), with: nil)
   }
   
@@ -77,7 +78,6 @@ class ViewController: UITableViewController, UITabBarControllerDelegate {
       let ac = UIAlertController(title: "Loading error", message: "There was a problem loading the feed; please check your connection and try again.", preferredStyle: .alert)
       ac.addAction(UIAlertAction(title: "OK", style: .default))
       present(ac, animated: true)
- 
   }
   
   @objc func creditsTapped() {
@@ -96,32 +96,34 @@ class ViewController: UITableViewController, UITabBarControllerDelegate {
     }
     ac.addAction(searchAction)
     present(ac, animated: true)
-
   }
 
-  func search(_ wordToLookFor: String) {
-    if wordToLookFor.count < 2 {
-      filteredPetitions = petitions
-      tableView.reloadData()
-      return
-    }
-    filteredPetitions = []
+  @objc func search(_ wordToLookFor: String) {
     
-    for petition in petitions {
-      if petition.body.contains(wordToLookFor) || petition.title.contains(wordToLookFor) {
-        filteredPetitions.append(petition)
+    DispatchQueue.global().async {
+      [weak self] in
+      if wordToLookFor.count < 2 {
+        self?.filteredPetitions = self!.petitions
+        self?.tableView.performSelector(onMainThread: #selector(UITableView.reloadData), with: nil, waitUntilDone: false)
+        return
       }
+      self?.filteredPetitions = []
+      
+      for petition in self!.petitions {
+        if petition.body.contains(wordToLookFor) || petition.title.contains(wordToLookFor) {
+          self?.filteredPetitions.append(petition)
+        }
+      }
+      
+      self?.tableView.performSelector(onMainThread: #selector(UITableView.reloadData), with: nil, waitUntilDone: false)
     }
-
-    tableView.reloadData()
-    
-
-    }
+ 
+  }
   func viewWillAppear(animated: Bool) {
     super.viewWillAppear(animated)
     tableView.reloadData()
   }
-//Want to refresh table view when tab bar item pressed
+//I want to improve it . Perform refresh table view when tab bar item pressed
 //  func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
 //      tableView.reloadData()
 //    }
