@@ -99,30 +99,27 @@ class ViewController: UITableViewController, UITabBarControllerDelegate {
   }
 
   @objc func search(_ wordToLookFor: String) {
-    
-    DispatchQueue.global().async {
-      [weak self] in
+ 
       if wordToLookFor.count < 2 {
-        self?.filteredPetitions = self!.petitions
-        self?.tableView.performSelector(onMainThread: #selector(UITableView.reloadData), with: nil, waitUntilDone: false)
+        filteredPetitions = petitions
+        tableView.performSelector(onMainThread: #selector(UITableView.reloadData), with: nil, waitUntilDone: false)
         return
       }
-      self?.filteredPetitions = []
-      
-      for petition in self!.petitions {
+      filteredPetitions = []
+    DispatchQueue.global().async { [weak self] in
+      guard let self = self else { return }
+      for petition in self.petitions {
         if petition.body.contains(wordToLookFor) || petition.title.contains(wordToLookFor) {
-          self?.filteredPetitions.append(petition)
+          self.filteredPetitions.append(petition)
         }
       }
-      
-      self?.tableView.performSelector(onMainThread: #selector(UITableView.reloadData), with: nil, waitUntilDone: false)
+      DispatchQueue.main.async {
+        self.tableView.reloadData()
+      }
     }
- 
-  }
-  func viewWillAppear(animated: Bool) {
-    super.viewWillAppear(animated)
     tableView.reloadData()
   }
+  
 //I want to improve it . Perform refresh table view when tab bar item pressed
 //  func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
 //      tableView.reloadData()
